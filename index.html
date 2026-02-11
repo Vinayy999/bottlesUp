@@ -95,20 +95,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BottlesUp | Custom 1L Water Bottles</title>
-  <meta name="description" content="Manufacturer of premium 1 litre custom branded water bottles for businesses, events and corporates." />
-
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BottlesUp | Premium Custom 1L Water Bottles</title>
+  <meta name="description" content="Manufacturer of premium 1 litre custom branded water bottles for businesses, events and corporates.">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary: #0a6cff;
       --secondary: #00c2a8;
+      --accent: #ff6b6b;
       --dark: #0f172a;
       --light: #f8fafc;
+      --white: #ffffff;
+      --gradient: linear-gradient(135deg, #0a6cff, #00c2a8);
+      --gradient-cta: linear-gradient(135deg, #0a6cff, #1e40af);
     }
 
     * {
@@ -118,40 +119,55 @@
       font-family: 'Poppins', sans-serif;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       background: var(--light);
       color: var(--dark);
       line-height: 1.6;
+      overflow-x: hidden;
     }
 
-    /* ---------------- NAVBAR ---------------- */
+    /* NAVBAR */
     nav {
-      background: #ffffff;
-      padding: 15px 30px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 1.2rem 2.5rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      position: sticky;
+      position: fixed;
       top: 0;
+      left: 0;
+      right: 0;
       z-index: 1000;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
     }
 
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+    nav.scrolled {
+      padding: 1rem 2.5rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
 
-  font-weight: 700;
-  font-size: 1.3rem;
-  color: var(--primary);
-}
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 700;
+      font-size: 1.6rem;
+      color: var(--primary);
+      text-decoration: none;
+    }
 
-.logo img {
-  width: 60px;
-  height: 60px;
-  object-fit: contain;
-}
+    .logo img {
+      width: 55px;
+      height: 55px;
+      object-fit: contain;
+      border-radius: 50%;
+      box-shadow: 0 5px 20px rgba(10, 108, 255, 0.3);
+    }
 
     #menu-toggle {
       display: none;
@@ -161,251 +177,727 @@
       display: none;
       font-size: 1.8rem;
       cursor: pointer;
+      color: var(--dark);
+      padding: 0.5rem;
     }
 
     .nav-links {
-      list-style: none;
       display: flex;
-      gap: 25px;
+      list-style: none;
+      gap: 2.5rem;
+      margin: 0;
+      padding: 0;
     }
 
     .nav-links a {
       text-decoration: none;
       color: var(--dark);
       font-weight: 500;
+      font-size: 1rem;
+      position: relative;
+      transition: color 0.3s ease;
     }
 
-    /* ---------------- HEADER ---------------- */
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background: var(--gradient);
+      transition: width 0.3s ease;
+      border-radius: 2px;
+    }
+
+    .nav-links a:hover::after,
+    .nav-links a.active::after {
+      width: 100%;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    /* HERO */
     header {
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: #fff;
-      padding: 80px 20px;
+      background: var(--gradient);
+      color: var(--white);
+      padding: 140px 2rem 100px;
       text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(255,255,255,0.2) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.15) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(120,119,198,0.1) 0%, transparent 50%);
+      animation: float 25s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) scale(1); }
+      33% { transform: translateY(-20px) scale(1.02); }
+      66% { transform: translateY(-10px) scale(0.98); }
     }
 
     header h1 {
-      font-size: 3rem;
-      margin-bottom: 10px;
+      font-size: clamp(2.8rem, 5vw, 3.8rem);
+      font-weight: 700;
+      margin: 0 auto 1.5rem;
+      max-width: 800px;
+      background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.9) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      opacity: 0;
+      animation: fadeInUp 1s ease 0.3s forwards;
+      line-height: 1.2;
     }
 
     header p {
-      font-size: 1.1rem;
-      max-width: 700px;
-      margin: auto;
+      font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+      max-width: 650px;
+      margin: 0 auto 2.5rem;
+      opacity: 0;
+      animation: fadeInUp 1s ease 0.6s forwards;
     }
 
-    /* ---------------- SECTIONS ---------------- */
+    .hero-buttons {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeInUp 1s ease 0.9s forwards;
+    }
+
+    .btn {
+      padding: 1.1rem 2.5rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      position: relative;
+      overflow: hidden;
+      min-width: 180px;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      background: rgba(255,255,255,0.25);
+      color: var(--white);
+      backdrop-filter: blur(15px);
+      border: 2px solid rgba(255,255,255,0.4);
+    }
+
+    .btn-primary:hover {
+      background: var(--white);
+      color: var(--primary);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(255,255,255,0.4);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--white);
+      border: 2px solid rgba(255,255,255,0.6);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.15);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(255,255,255,0.3);
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* SECTIONS - PERFECT CENTER ALIGNMENT */
     section {
-      padding: 70px 20px;
+      padding: 6rem 2rem;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    h2 {
+      text-align: center !important;
+      font-size: clamp(2.2rem, 4vw, 2.8rem);
+      font-weight: 700;
+      margin: 0 auto 4rem;
+      max-width: 600px;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      position: relative;
+    }
+
+    h2::after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 4px;
+      background: var(--gradient);
+      margin: 1rem auto 0;
+      border-radius: 2px;
+    }
+
+    .section-content {
       max-width: 1200px;
-      margin: auto;
+      margin: 0 auto;
+      text-align: center;
     }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 30px;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      justify-items: center;
     }
 
     .card {
-      background: #fff;
-      border-radius: 16px;
-      padding: 30px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-      transition: transform 0.3s ease;
+      background: var(--white);
+      border-radius: 24px;
+      padding: 2.5rem 2.2rem;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 1px solid rgba(255,255,255,0.8);
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      max-width: 360px;
+      text-align: left;
     }
 
     .card:hover {
-      transform: translateY(-5px);
+      transform: translateY(-15px);
+      box-shadow: 0 35px 70px rgba(0,0,0,0.15);
     }
 
     .card h3 {
-      margin-bottom: 10px;
+      margin-bottom: 1.2rem;
       color: var(--primary);
+      font-size: 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
     }
 
-    .highlight {
-      background: linear-gradient(135deg, #e0f2fe, #ecfeff);
-      border-radius: 20px;
+    /* PRODUCTS SECTION - BULLETPROOF CENTERED */
+    #products {
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+      border-radius: 32px;
+      margin: 3rem 2rem;
+      padding: 4rem 2rem;
     }
 
-    /* ---------------- CTA ---------------- */
-    .cta {
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: #fff;
+    .product-grid {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3rem;
+      max-width: 1200px;
+      margin: 3rem auto 0;
+    }
+
+    .product-grid .cards-row {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      max-width: 1000px;
+      flex-wrap: wrap;
+    }
+
+    .product-img-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .product-img {
+      width: 100%;
+      max-width: 420px;
+      height: auto;
+      max-height: 420px;
+      object-fit: contain;
+      border-radius: 24px;
+      box-shadow: 0 25px 60px rgba(10,108,255,0.25);
+      transition: all 0.6s ease;
+    }
+
+    .product-img:hover {
+      transform: rotateY(8deg) rotateX(3deg) scale(1.03);
+      box-shadow: 0 40px 80px rgba(10,108,255,0.35);
+    }
+
+    /* REVIEWS */
+    .review-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 2.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .review-card {
+      background: var(--white);
+      border-radius: 24px;
+      padding: 3rem 2.2rem 2.5rem;
+      box-shadow: 0 15px 45px rgba(0,0,0,0.08);
       text-align: center;
-      padding: 60px 20px;
-      border-start-start-radius: 25px;
-      border-top-right-radius: 25px;
+      position: relative;
+      transition: all 0.4s ease;
+      max-width: 380px;
+    }
+
+    .review-card::before {
+      content: '"';
+      position: absolute;
+      top: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 4.5rem;
+      color: var(--secondary);
+      font-weight: 300;
+      line-height: 1;
+    }
+
+    .review-card p {
+      margin-bottom: 1.5rem;
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+
+    .review-card .stars {
+      color: #ffb400;
+      font-size: 1.6rem;
+      margin-bottom: 1rem;
+    }
+
+    .reviewer {
+      font-weight: 600;
+      color: var(--primary);
+      font-size: 1rem;
+    }
+
+    /* CTA - BULLETPROOF CENTERED */
+    .cta {
+      background: var(--gradient-cta);
+      color: var(--white);
+      text-align: center;
+      padding: 5rem 3rem;
+      border-radius: 32px;
+      margin: 4rem 2rem;
+      position: relative;
+      overflow: hidden;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta h2 {
+      font-size: clamp(2.2rem, 4vw, 2.8rem);
+      margin: 0 auto 1.5rem;
+      font-weight: 700;
+      max-width: 600px;
+    }
+
+    .cta > p {
+      font-size: 1.2rem;
+      margin: 0 auto 2rem;
+      max-width: 500px;
+      opacity: 0.95;
+    }
+
+    .cta .contact-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      margin: 2.5rem 0;
+      font-size: 1.15rem;
     }
 
     .cta a {
       display: inline-block;
-      background: #fff;
+      background: var(--white);
       color: var(--primary);
-      padding: 12px 30px;
-      border-radius: 30px;
+      padding: 1.3rem 3.5rem;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 1.15rem;
       text-decoration: none;
-      font-weight: 600;
-      margin-top: 20px;
+      box-shadow: 0 15px 40px rgba(255,255,255,0.4);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    /* ---------------- FOOTER ---------------- */
+    .cta a:hover {
+      transform: translateY(-6px) scale(1.05);
+      box-shadow: 0 25px 50px rgba(255,255,255,0.6);
+      color: var(--primary);
+    }
+
+    /* FOOTER */
     footer {
-      background: #020617;
-      color: #cbd5f5;
-      padding: 40px 20px;
+      background: var(--dark);
+      color: #cbd5e1;
+      padding: 3.5rem 2rem 2rem;
       text-align: center;
+      line-height: 1.6;
     }
 
     footer p {
-      font-size: 0.9rem;
-      margin: 5px 0;
+      margin-bottom: 0.5rem;
     }
 
-    /* ---------------- RESPONSIVE ---------------- */
+    /* ANIMATIONS */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      .product-grid .cards-row {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
     @media (max-width: 768px) {
+      nav {
+        padding: 1rem 1.5rem;
+      }
+
+      nav.scrolled {
+        padding: 0.9rem 1.5rem;
+      }
 
       .menu-icon {
         display: block;
       }
 
       .nav-links {
-        position: absolute;
-        top: 65px;
+        position: fixed;
+        top: 100%;
         left: 0;
-        width: 100%;
-        background: #fff;
+        right: 0;
+        background: rgba(255,255,255,0.98);
+        backdrop-filter: blur(25px);
         flex-direction: column;
-        align-items: center;
-        padding: 20px 0;
-        gap: 15px;
+        padding: 2.5rem 1.5rem;
+        gap: 2rem;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.15);
         display: none;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.08);
       }
 
       #menu-toggle:checked + .menu-icon + .nav-links {
         display: flex;
       }
 
-      header h1 {
-        font-size: 2rem;
+      .hero-buttons {
+        flex-direction: column;
+        align-items: center;
       }
 
-      header p {
-        font-size: 1rem;
+      .btn {
+        width: 100%;
+        max-width: 320px;
+      }
+
+      header {
+        padding: 120px 1.5rem 80px;
       }
 
       section {
-        padding: 50px 16px;
+        padding: 4rem 1.5rem;
       }
 
-      .card {
-        padding: 22px;
+      #products {
+        margin: 2rem 1rem;
+        padding: 3rem 1.5rem;
       }
 
-      .cta h2 {
-        font-size: 1.6rem;
+      .cta {
+        margin: 3rem 1rem;
+        padding: 4rem 2rem;
       }
-    }
 
-    /* ---------------- IMAGE ---------------- */
-    .product-img {
-      width: 100%;
-      max-height: 320px;
-      object-fit: contain;
-      border-radius: 12px;
+      .grid, .review-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
     }
   </style>
 </head>
-
 <body>
-
   <nav>
-<div class="logo">
-  <img src="https://raw.githubusercontent.com/Vinayy999/bottlesUp/refs/heads/master/iconBottlesUp.jpg" alt="BottlesUp Logo">
-  <span>BottlesUp</span>
-</div>
+    <a href="#header" class="logo">
+      <img src="https://raw.githubusercontent.com/Vinayy999/bottlesUp/refs/heads/master/iconBottlesUp.jpg" alt="BottlesUp Logo" loading="lazy">
+      <span>BottlesUp</span>
+    </a>
     <input type="checkbox" id="menu-toggle">
     <label for="menu-toggle" class="menu-icon">☰</label>
-
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
       <li><a href="#products">Products</a></li>
       <li><a href="#whyus">Why Us</a></li>
+      <li><a href="#reviews">Reviews</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
   </nav>
 
-  <header>
+  <header id="header">
     <h1>Premium Custom 1L Water Bottles</h1>
-    <p>We manufacture high-quality 1 litre water bottles with your business branding – perfect for corporates, events & promotions.</p>
+    <p>High-quality branded bottles perfect for corporate events, promotions & offices across India.</p>
+    <div class="hero-buttons">
+      <a href="#products" class="btn btn-primary">⭐ View Products</a>
+      <a href="#contact" class="btn btn-secondary">💬 Get Quote</a>
+    </div>
   </header>
 
-  <section id="about">
-    <div class="grid">
-      <div class="card">
-        <h3>Who We Are</h3>
-        <p>Specialized water bottle manufacturing unit offering custom branding solutions.</p>
-      </div>
-      <div class="card">
-        <h3>Our Mission</h3>
-        <p>Deliver hygienic, branded drinking water that promotes your business.</p>
-      </div>
-      <div class="card">
-        <h3>Our Vision</h3>
-        <p>To become India’s most trusted branded packaged water supplier.</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="products" class="highlight">
-    <h2 style="text-align:center; margin-bottom:40px;">Our Product</h2>
-    <div class="grid">
-      <div class="card">
-        <h3>1 Litre Hand Bottle</h3>
-        <p>
-          • Food-grade plastic<br>
-          • Custom printed labels<br>
-          • Ideal for events & offices<br>
-          • Bulk order pricing
-        </p>
-      </div>
-
-      <div class="card" style="text-align:center;">
-        <img src="bottlesupsample.png" alt="Bottle" class="product-img">
-      </div>
-
-      <div class="card">
-        <h3>Custom Branding</h3>
-        <p>Your logo, brand name & contact details printed for maximum visibility.</p>
+  <section id="about" class="fade-in">
+    <h2>Premium Manufacturing Excellence</h2>
+    <div class="section-content">
+      <div class="grid">
+        <div class="card">
+          <h3>🛠️ Premium Manufacturing</h3>
+          <p>Specialized factory in Agra producing food-grade custom water bottles for businesses nationwide.</p>
+        </div>
+        <div class="card">
+          <h3>🎯 Brand Promotion</h3>
+          <p>Every bottle carries your logo, turning hydration into powerful marketing at every event.</p>
+        </div>
+        <div class="card">
+          <h3>🚀 Nationwide Reach</h3>
+          <p>Fast delivery across India with bulk pricing and sample availability within 48 hours.</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <section id="whyus">
-    <h2 style="text-align:center; margin-bottom:40px;">Why Choose Us</h2>
-    <div class="grid">
-      <div class="card"><h3>Quality Assured</h3><p>Strict hygiene & quality checks.</p></div>
-      <div class="card"><h3>Attractive Pricing</h3><p>Best rates for bulk orders.</p></div>
-      <div class="card"><h3>Fast Delivery</h3><p>On-time supply guaranteed.</p></div>
-      <div class="card"><h3>Brand Visibility</h3><p>Your brand everywhere.</p></div>
+<section id="products" class="fade-in">
+  <h2>Our Product Range</h2>
+  <div class="product-grid">
+
+    <!-- 250 ml -->
+    <div class="cards-row">
+      <div class="card">
+        <h3>💧 250 ml Mini Bottle</h3>
+        <ul style="padding-left: 1.2rem; margin-top: 1rem;">
+          <li>BPA‑free food‑grade plastic</li>
+          <li>Compact size for kids & small hands</li>
+          <li>Full‑color HD printing on body</li>
+          <li>Leak‑proof screw cap</li>
+          <li>Bulk pricing from 1000+ units</li>
+        </ul>
+      </div>
+      <div class="product-img-container">
+        <img src="bottlesup250ml.png" alt="Mini 250 ml Custom Branded Water Bottle" class="product-img" loading="lazy">
+      </div>
+      <div class="card">
+        <h3>🎨 250 ml Customization</h3>
+        <p>Ideal for schools, kids events, and corporate gift kits with small‑format branding that still packs visibility.</p>
+      </div>
+    </div>
+
+    <!-- 500 ml -->
+    <div class="cards-row">
+      <div class="card">
+        <h3>💧 500 ml Everyday Bottle</h3>
+        <ul style="padding-left: 1.2rem; margin-top: 1rem;">
+          <li>BPA‑free food‑grade plastic</li>
+          <li>Ergonomic grip, easy to carry</li>
+          <li>Full‑color HD printing on body & cap</li>
+          <li>Perfect for gyms, offices & travel</li>
+          <li>Bulk pricing from 1000+ units</li>
+        </ul>
+      </div>
+      <div class="product-img-container">
+        <img src="bottlesup500ml.png" alt="500 ml Custom Branded Water Bottle" class="product-img" loading="lazy">
+      </div>
+      <div class="card">
+        <h3>🎨 500 ml Customization</h3>
+        <p>Great daily‑use bottle for brands running fitness‑centric campaigns, staff giveaways, and promotional drives.</p>
+      </div>
+    </div>
+
+    <!-- 1L (existing, slightly adjusted for consistency) -->
+    <div class="cards-row">
+      <div class="card">
+        <h3>💧 1L Premium Bottle</h3>
+        <ul style="padding-left: 1.2rem; margin-top: 1rem;">
+          <li>BPA‑free food‑grade plastic</li>
+          <li>Full‑color HD printing</li>
+          <li>Leak‑proof design</li>
+          <li>1000+ unit bulk pricing</li>
+          <li>FSSAI certified</li>
+        </ul>
+      </div>
+      <div class="product-img-container">
+        <img src="bottlesupsample.png" alt="1L Custom Branded Water Bottle" class="product-img" loading="lazy">
+      </div>
+      <div class="card">
+        <h3>🎨 Full Customization</h3>
+        <p>Logo, colors, QR codes, contact info – complete branding solution designed for maximum visibility.</p>
+      </div>
+    </div>
+
+    <!-- 2L -->
+    <div class="cards-row">
+      <div class="card">
+        <h3>💧 2L Family & Office Bottle</h3>
+        <ul style="padding-left: 1.2rem; margin-top: 1rem;">
+          <li>BPA‑free food‑grade heavy‑duty plastic</li>
+          <li>Large capacity for families & offices</li>
+          <li>Full‑color HD printing on body & base</li>
+          <li>Leak‑proof wide‑mouth design</li>
+          <li>Bulk pricing from 500+ units</li>
+        </ul>
+      </div>
+      <div class="product-img-container">
+        <img src="bottlesup2l.png" alt="2L Custom Branded Water Bottle" class="product-img" loading="lazy">
+      </div>
+      <div class="card">
+        <h3>🎨 2L Customization</h3>
+        <p>Ideal for offices, messes, cafeterias, and family‑focused campaigns where big‑volume hydration is key.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+  <section id="whyus" class="fade-in">
+    <h2>Why Businesses Choose Us</h2>
+    <div class="section-content">
+      <div class="grid">
+        <div class="card">
+          <h3>✅ Factory Quality</h3>
+          <p>FSSAI certified production with strict hygiene controls and quality assurance.</p>
+        </div>
+        <div class="card">
+          <h3>💰 Direct Pricing</h3>
+          <p>No middlemen - factory-direct rates with volume discounts from 1000 bottles.</p>
+        </div>
+        <div class="card">
+          <h3>⚡ Express Delivery</h3>
+          <p>Samples in 48hrs, bulk orders 7-10 days pan-India from Agra hub.</p>
+        </div>
+        <div class="card">
+          <h3>📈 Marketing Impact</h3>
+          <p>Your brand travels everywhere - conferences, offices, events nationwide.</p>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="cta" id="contact">
-    <h2>Get Your Brand on Every Bottle</h2>
-    <p>Contact us for pricing & samples</p>
-    <p><strong>Phone:</strong> +91-8126564201</p>
-    <p><strong>Email:</strong> ankit@bottlesup.com</p>
-    <p><strong>Location:</strong> Agra, India</p>
-    <a href="tel:+918126564201">Call Now</a>
+  <section id="reviews" class="fade-in">
+    <h2>Trusted by Businesses</h2>
+    <div class="section-content">
+      <div class="review-grid">
+        <div class="review-card">
+          <p>Perfect for our annual corporate retreat! Quality exceeded expectations and labels looked premium.</p>
+          <div class="stars">★★★★★</div>
+          <div class="reviewer">Priya Sharma, Delhi Events</div>
+        </div>
+        <div class="review-card">
+          <p>Best value for bulk custom bottles. Fast service from Agra and excellent print quality.</p>
+          <div class="stars">★★★★★</div>
+          <div class="reviewer">Rajesh Kumar, Mumbai Corp</div>
+        </div>
+        <div class="review-card">
+          <p>Will reorder! Great for product launches and team events. Nationwide delivery worked perfectly.</p>
+          <div class="stars">★★★★☆</div>
+          <div class="reviewer">Anjali Mehta, Bangalore</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="cta fade-in">
+    <h2>Ready to Brand Your Bottles?</h2>
+    <p>Get custom pricing and free samples within 48 hours</p>
+    <div class="contact-info">
+      <strong>📞 +91-8126564201</strong>
+      <strong>✉️ ankit@bottlesup.com</strong>
+      <span>Agra, Uttar Pradesh • Pan-India Delivery</span>
+    </div>
+    <a href="tel:+918126564201">Call Now for Quote</a>
   </section>
 
   <footer>
-    <p>© 2026 BottlesUp. All Rights Reserved.</p>
-    <p>Custom Branded Packaged Drinking Water</p>
+    <p>© 2026 BottlesUp. All Rights Reserved. | Premium Custom Water Bottles from Agra</p>
+    <p>FSSAI Certified | Nationwide Delivery | Bulk Orders Welcome</p>
   </footer>
 
+  <script>
+    window.addEventListener('scroll', () => {
+      document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 100);
+    });
+
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const targetId = link.getAttribute('href').substring(1);
+        const target = document.getElementById(targetId);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          document.getElementById('menu-toggle').checked = false;
+        }
+      });
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -100px 0px' });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    window.addEventListener('scroll', () => {
+      const sections = document.querySelectorAll('section[id]');
+      let current = '';
+      
+      sections.forEach(section => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= 150) {
+          current = section.id;
+        }
+      });
+      
+      document.querySelectorAll('.nav-links a').forEach(a => {
+        a.classList.remove('active');
+        if (a.getAttribute('href') === `#${current}`) {
+          a.classList.add('active');
+        }
+      });
+    });
+  </script>
 </body>
 </html>
