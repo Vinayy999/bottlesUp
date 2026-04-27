@@ -1,904 +1,373 @@
-<!--<!doctype html>
-<html>
-  <head>
-    <title>Realtime GPS Tracker</title>
-    <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.19.0.min.js"></script>
-    <link rel="stylesheet" href="map.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-  </head>
-  <body>
-      <div class="bg"></div>
-     <div class="bg-others"> 
-    <div class="container">
-      <h1 >Realtime GPS Tracker with Raspberry PI</h1>
-        <center><hr style="height:2px; border:none; color:#ffffff; background-color:#ffffff; width:35%; margin: 0 auto 0 auto;"></center>
-        <p>by GLAians - Ayush Gupta and Vinay Soni, We Are The Makers</p>  
-        <center><button class="btn btn-success col-sm-3" id="action">Start Tracking</button></center><br>
-        <center><div id="map-canvas"></div></center>
-    </div>
-          </div>
-
-    <script>
-    window.lat = 27.2178918;
-    window.lng = 77.9951681;
-
-    var map;
-    var mark;
-    var lineCoords = [];
-      
-    var initialize = function() {
-      map  = new google.maps.Map(document.getElementById('map-canvas'), {center:{lat:lat,lng:lng},zoom:12});
-      mark = new google.maps.Marker({position:{lat:lat, lng:lng}, map:map});
-    };
-
-    window.initialize = initialize;
-
-    var redraw = function(payload) {
-      if(payload.message.lat){
-      lat = payload.message.lat;
-      lng = payload.message.lng;
-
-      map.setCenter({lat:lat, lng:lng, alt:0});
-      mark.setPosition({lat:lat, lng:lng, alt:0});
-      
-      lineCoords.push(new google.maps.LatLng(lat, lng));
-
-      var lineCoordinatesPath = new google.maps.Polyline({
-        path: lineCoords,
-        geodesic: true,
-        strokeColor: '#2E10FF'
-      });
-      
-      lineCoordinatesPath.setMap(map);}
-    };
-
-    var pnChannel = "raspi-tracker";
-
-    var pubnub = new PubNub({
-        publishKey: '' ,
-        subscribeKey: ''
-    });
-        
-    document.querySelector('#action').addEventListener('click', function(){
-        var text = document.getElementById("action").textContent;
-        if(text == "Start Tracking"){
-            pubnub.subscribe({channels: [pnChannel]});
-            pubnub.addListener({message:redraw});
-            document.getElementById("action").classList.add('btn-danger');
-            document.getElementById("action").classList.remove('btn-success');
-            document.getElementById("action").textContent = 'Stop Tracking';
-        }
-        else{
-            pubnub.unsubscribe( {channels: [pnChannel] });
-            document.getElementById("action").classList.remove('btn-danger');
-            document.getElementById("action").classList.add('btn-success');
-            document.getElementById("action").textContent = 'Start Tracking';
-        }
-        });
-    </script>
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyD9XLAV6FuHFcdcOrqTcU4q6QtS98FoY_I&callback=initialize"></script>
-  </body>
-</html>
-**\\for checking\\**
-<script>
-    function newPoint(time) {
-          var radius = 0.01;
-          var x = Math.random() * radius;
-          var y = Math.random() * radius;
-          return {lat:window.lat + y, lng:window.lng + x};
-            }
-          setInterval(function() {
-          pubnub.publish({channel:pnChannel, message:newPoint()});
-          }, 500);
-    </script> -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BottlesUp | Premium Custom 1L Water Bottles</title>
-  <meta name="description" content="Manufacturer of premium 1 litre custom branded water bottles for businesses, events and corporates.">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --primary: #0a6cff;
-      --secondary: #00c2a8;
-      --accent: #ff6b6b;
-      --dark: #0f172a;
-      --light: #f8fafc;
-      --white: #ffffff;
-      --gradient: linear-gradient(135deg, #0a6cff, #00c2a8);
-      --gradient-cta: linear-gradient(135deg, #0a6cff, #1e40af);
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      background: var(--light);
-      color: var(--dark);
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
-
-    /* NAVBAR */
-    nav {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      padding: 1.2rem 2.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      transition: all 0.3s ease;
-    }
-
-    nav.scrolled {
-      padding: 1rem 2.5rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      font-weight: 700;
-      font-size: 1.6rem;
-      color: var(--primary);
-      text-decoration: none;
-    }
-
-    .logo img {
-      width: 55px;
-      height: 55px;
-      object-fit: contain;
-      border-radius: 50%;
-      box-shadow: 0 5px 20px rgba(10, 108, 255, 0.3);
-    }
-
-    #menu-toggle {
-      display: none;
-    }
-
-    .menu-icon {
-      display: none;
-      font-size: 1.8rem;
-      cursor: pointer;
-      color: var(--dark);
-      padding: 0.5rem;
-    }
-
-    .nav-links {
-      display: flex;
-      list-style: none;
-      gap: 2.5rem;
-      margin: 0;
-      padding: 0;
-    }
-
-    .nav-links a {
-      text-decoration: none;
-      color: var(--dark);
-      font-weight: 500;
-      font-size: 1rem;
-      position: relative;
-      transition: color 0.3s ease;
-    }
-
-    .nav-links a::after {
-      content: '';
-      position: absolute;
-      bottom: -8px;
-      left: 0;
-      width: 0;
-      height: 3px;
-      background: var(--gradient);
-      transition: width 0.3s ease;
-      border-radius: 2px;
-    }
-
-    .nav-links a:hover::after,
-    .nav-links a.active::after {
-      width: 100%;
-    }
-
-    .nav-links a:hover {
-      color: var(--primary);
-    }
-
-    /* HERO */
-    header {
-      background: var(--gradient);
-      color: var(--white);
-      padding: 140px 2rem 100px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    header::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: 
-        radial-gradient(circle at 20% 80%, rgba(255,255,255,0.2) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.15) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(120,119,198,0.1) 0%, transparent 50%);
-      animation: float 25s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0) scale(1); }
-      33% { transform: translateY(-20px) scale(1.02); }
-      66% { transform: translateY(-10px) scale(0.98); }
-    }
-
-    header h1 {
-      font-size: clamp(2.8rem, 5vw, 3.8rem);
-      font-weight: 700;
-      margin: 0 auto 1.5rem;
-      max-width: 800px;
-      background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.9) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      opacity: 0;
-      animation: fadeInUp 1s ease 0.3s forwards;
-      line-height: 1.2;
-    }
-
-    header p {
-      font-size: clamp(1.1rem, 2.5vw, 1.3rem);
-      max-width: 650px;
-      margin: 0 auto 2.5rem;
-      opacity: 0;
-      animation: fadeInUp 1s ease 0.6s forwards;
-    }
-
-    .hero-buttons {
-      display: flex;
-      gap: 1.5rem;
-      justify-content: center;
-      flex-wrap: wrap;
-      opacity: 0;
-      animation: fadeInUp 1s ease 0.9s forwards;
-    }
-
-    .btn {
-      padding: 1.1rem 2.5rem;
-      border-radius: 50px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 1rem;
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      display: inline-flex;
-      align-items: center;
-      gap: 0.75rem;
-      position: relative;
-      overflow: hidden;
-      min-width: 180px;
-      justify-content: center;
-    }
-
-    .btn-primary {
-      background: rgba(255,255,255,0.25);
-      color: var(--white);
-      backdrop-filter: blur(15px);
-      border: 2px solid rgba(255,255,255,0.4);
-    }
-
-    .btn-primary:hover {
-      background: var(--white);
-      color: var(--primary);
-      transform: translateY(-4px);
-      box-shadow: 0 20px 40px rgba(255,255,255,0.4);
-    }
-
-    .btn-secondary {
-      background: transparent;
-      color: var(--white);
-      border: 2px solid rgba(255,255,255,0.6);
-    }
-
-    .btn-secondary:hover {
-      background: rgba(255,255,255,0.15);
-      transform: translateY(-4px);
-      box-shadow: 0 20px 40px rgba(255,255,255,0.3);
-    }
-
-    @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* SECTIONS - PERFECT CENTER ALIGNMENT */
-    section {
-      padding: 6rem 2rem;
-      max-width: 1300px;
-      margin: 0 auto;
-    }
-
-    h2 {
-      text-align: center !important;
-      font-size: clamp(2.2rem, 4vw, 2.8rem);
-      font-weight: 700;
-      margin: 0 auto 4rem;
-      max-width: 600px;
-      background: var(--gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      position: relative;
-    }
-
-    h2::after {
-      content: '';
-      display: block;
-      width: 80px;
-      height: 4px;
-      background: var(--gradient);
-      margin: 1rem auto 0;
-      border-radius: 2px;
-    }
-
-    .section-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      text-align: center;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 2.5rem;
-      max-width: 1200px;
-      margin: 0 auto;
-      justify-items: center;
-    }
-
-    .card {
-      background: var(--white);
-      border-radius: 24px;
-      padding: 2.5rem 2.2rem;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.06);
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      border: 1px solid rgba(255,255,255,0.8);
-      position: relative;
-      overflow: hidden;
-      width: 100%;
-      max-width: 360px;
-      text-align: left;
-    }
-
-    .card:hover {
-      transform: translateY(-15px);
-      box-shadow: 0 35px 70px rgba(0,0,0,0.15);
-    }
-
-    .card h3 {
-      margin-bottom: 1.2rem;
-      color: var(--primary);
-      font-size: 1.4rem;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    /* PRODUCTS SECTION - BULLETPROOF CENTERED */
-    #products {
-      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-      border-radius: 32px;
-      margin: 3rem 2rem;
-      padding: 4rem 2rem;
-    }
-
-    .product-grid {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 3rem;
-      max-width: 1200px;
-      margin: 3rem auto 0;
-    }
-
-    .product-grid .cards-row {
-      display: flex;
-      gap: 2rem;
-      justify-content: center;
-      max-width: 1000px;
-      flex-wrap: wrap;
-    }
-
-    .product-img-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .product-img {
-      width: 100%;
-      max-width: 420px;
-      height: auto;
-      max-height: 420px;
-      object-fit: contain;
-      border-radius: 24px;
-      box-shadow: 0 25px 60px rgba(10,108,255,0.25);
-      transition: all 0.6s ease;
-    }
-
-    .product-img:hover {
-      transform: rotateY(8deg) rotateX(3deg) scale(1.03);
-      box-shadow: 0 40px 80px rgba(10,108,255,0.35);
-    }
-
-    .review-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-      gap: 2.5rem;
-      max-width: 1200px;
-      margin: 0 auto;
-      justify-items: center;      /* center cards in each column */
-      justify-content: center;    /* center the grid itself */
-    }
-
-    .review-card {
-      background: var(--white);
-      border-radius: 24px;
-      padding: 3rem 2.2rem 2.5rem;
-      box-shadow: 0 15px 45px rgba(0,0,0,0.08);
-      text-align: center;
-      position: relative;
-      transition: all 0.4s ease;
-      max-width: 380px;
-    }
-
-    .review-card::before {
-      content: '"';
-      position: absolute;
-      top: 1.5rem;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 4.5rem;
-      color: var(--secondary);
-      font-weight: 300;
-      line-height: 1;
-    }
-
-    .review-card p {
-      margin-bottom: 1.5rem;
-      font-size: 1.05rem;
-      line-height: 1.6;
-    }
-
-    .review-card .stars {
-      color: #ffb400;
-      font-size: 1.6rem;
-      margin-bottom: 1rem;
-    }
-
-    .reviewer {
-      font-weight: 600;
-      color: var(--primary);
-      font-size: 1rem;
-    }
-
-    /* CTA - BULLETPROOF CENTERED */
-    .cta {
-      background: var(--gradient-cta);
-      color: var(--white);
-      text-align: center;
-      padding: 5rem 3rem;
-      border-radius: 32px;
-      margin: 4rem 2rem;
-      position: relative;
-      overflow: hidden;
-      max-width: 800px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .cta h2 {
-      font-size: clamp(2.2rem, 4vw, 2.8rem);
-      margin: 0 auto 1.5rem;
-      font-weight: 700;
-      max-width: 600px;
-    }
-
-    .cta > p {
-      font-size: 1.2rem;
-      margin: 0 auto 2rem;
-      max-width: 500px;
-      opacity: 0.95;
-    }
-
-    .cta .contact-info {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.75rem;
-      margin: 2.5rem 0;
-      font-size: 1.15rem;
-    }
-
-    .cta a {
-      display: inline-block;
-      background: var(--white);
-      color: var(--primary);
-      padding: 1.3rem 3.5rem;
-      border-radius: 50px;
-      font-weight: 700;
-      font-size: 1.15rem;
-      text-decoration: none;
-      box-shadow: 0 15px 40px rgba(255,255,255,0.4);
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    .cta a:hover {
-      transform: translateY(-6px) scale(1.05);
-      box-shadow: 0 25px 50px rgba(255,255,255,0.6);
-      color: var(--primary);
-    }
-
-    /* FOOTER */
-    footer {
-      background: var(--dark);
-      color: #cbd5e1;
-      padding: 3.5rem 2rem 2rem;
-      text-align: center;
-      line-height: 1.6;
-    }
-
-    footer p {
-      margin-bottom: 0.5rem;
-    }
-
-    /* ANIMATIONS */
-    .fade-in {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: all 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    }
-
-    .fade-in.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* RESPONSIVE */
-    @media (max-width: 1024px) {
-      .product-grid .cards-row {
-        flex-direction: column;
-        align-items: center;
-      }
-    }
-
-    @media (max-width: 768px) {
-      nav {
-        padding: 1rem 1.5rem;
-      }
-
-      nav.scrolled {
-        padding: 0.9rem 1.5rem;
-      }
-
-      .menu-icon {
-        display: block;
-      }
-
-      .nav-links {
-        position: fixed;
-        top: 100%;
-        left: 0;
-        right: 0;
-        background: rgba(255,255,255,0.98);
-        backdrop-filter: blur(25px);
-        flex-direction: column;
-        padding: 2.5rem 1.5rem;
-        gap: 2rem;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-        display: none;
-      }
-
-      #menu-toggle:checked + .menu-icon + .nav-links {
-        display: flex;
-      }
-
-      .hero-buttons {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .btn {
-        width: 100%;
-        max-width: 320px;
-      }
-
-      header {
-        padding: 120px 1.5rem 80px;
-      }
-
-      section {
-        padding: 4rem 1.5rem;
-      }
-
-      #products {
-        margin: 2rem 1rem;
-        padding: 3rem 1.5rem;
-      }
-
-      .cta {
-        margin: 3rem 1rem;
-        padding: 4rem 2rem;
-      }
-
-      .grid, .review-grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vinay Soni — Software Developer</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1F4E79;
+    --blue: #2E75B6;
+    --sky: #BDD7EE;
+    --ink: #1A1A1A;
+    --muted: #595959;
+    --rule: #D0DFF0;
+    --bg: #FAFCFF;
+    --card: #FFFFFF;
+    --accent-bg: #EBF3FA;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    font-size: 14px;
+  }
+
+  .page {
+    max-width: 860px;
+    margin: 40px auto;
+    background: var(--card);
+    box-shadow: 0 4px 40px rgba(31,78,121,0.10);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
+    padding: 48px 56px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 240px; height: 240px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 50%;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: 40px;
+    width: 160px; height: 160px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 50%;
+  }
+
+  .name {
+    font-family: 'Lora', serif;
+    font-size: 42px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+  }
+
+  .tagline {
+    margin-top: 8px;
+    color: var(--sky);
+    font-size: 13px;
+    font-weight: 300;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+  }
+
+  .contacts {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .contacts a, .contact-item {
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    font-size: 12.5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s;
+  }
+  .contacts a:hover { color: #fff; }
+  .contact-icon {
+    width: 16px; height: 16px;
+    opacity: 0.7;
+    flex-shrink: 0;
+  }
+
+  /* BODY */
+  .body { display: grid; grid-template-columns: 1fr 260px; gap: 0; }
+
+  .main { padding: 44px 48px; border-right: 1px solid var(--rule); }
+  .sidebar { padding: 44px 36px; background: var(--accent-bg); }
+
+  /* SECTION */
+  .section { margin-bottom: 36px; }
+  .section:last-child { margin-bottom: 0; }
+
+  .section-title {
+    font-family: 'Lora', serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--rule);
+  }
+
+  /* SUMMARY */
+  .summary {
+    font-size: 13.5px;
+    color: #333;
+    line-height: 1.75;
+  }
+
+  /* EXPERIENCE */
+  .job { margin-bottom: 26px; }
+  .job:last-child { margin-bottom: 0; }
+
+  .job-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 3px; }
+  .job-title { font-weight: 600; font-size: 14.5px; color: var(--ink); }
+  .job-dates { font-size: 11.5px; color: var(--muted); font-style: italic; white-space: nowrap; }
+  .job-company { font-size: 13px; color: var(--blue); font-weight: 500; margin-bottom: 10px; }
+
+  ul.bullets {
+    list-style: none;
+    padding: 0;
+  }
+  ul.bullets li {
+    font-size: 13px;
+    color: #333;
+    padding: 3px 0 3px 18px;
+    position: relative;
+    line-height: 1.65;
+  }
+  ul.bullets li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--blue);
+    font-size: 11px;
+    top: 5px;
+  }
+
+  /* PROJECTS */
+  .project { margin-bottom: 22px; }
+  .project-name { font-weight: 600; font-size: 13.5px; color: var(--navy); }
+  .project-tech { font-size: 11.5px; color: var(--blue); font-style: italic; margin: 2px 0 8px; }
+
+  /* EDUCATION */
+  .edu { margin-bottom: 18px; }
+  .edu-degree { font-weight: 600; font-size: 13.5px; color: var(--ink); }
+  .edu-school { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+  .edu-date { font-size: 11.5px; color: var(--blue); font-style: italic; margin-top: 2px; }
+
+  /* SIDEBAR */
+  .skill-group { margin-bottom: 22px; }
+  .skill-label { font-size: 10.5px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--navy); margin-bottom: 8px; }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .skill-tag {
+    background: #fff;
+    border: 1px solid var(--rule);
+    color: var(--ink);
+    font-size: 11.5px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-weight: 400;
+  }
+
+  .sidebar .section-title { color: var(--navy); border-color: var(--sky); }
+
+  @media print {
+    body { background: white; }
+    .page { box-shadow: none; margin: 0; }
+  }
+</style>
 </head>
 <body>
-  <nav>
-    <a href="#header" class="logo">
-      <img src="https://raw.githubusercontent.com/Vinayy999/bottlesUp/refs/heads/master/iconBottlesUp.jpg" alt="BottlesUp Logo" loading="lazy">
-      <span>BottlesUp</span>
-    </a>
-    <input type="checkbox" id="menu-toggle">
-    <label for="menu-toggle" class="menu-icon">☰</label>
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#products">Products</a></li>
-      <li><a href="#whyus">Why Us</a></li>
-      <li><a href="#reviews">Reviews</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
+<div class="page">
 
-  <header id="header">
-    <h1>Premium Custom 1L Water Bottles</h1>
-    <p>High-quality branded bottles perfect for corporate events, promotions & offices across India.</p>
-    <div class="hero-buttons">
-      <a href="#products" class="btn btn-primary">⭐ View Products</a>
-      <a href="#contact" class="btn btn-secondary">💬 Get Quote</a>
+  <!-- HEADER -->
+  <div class="header">
+    <div class="name">Vinay Soni</div>
+    <div class="tagline">Software Developer &nbsp;·&nbsp; .NET Core &nbsp;·&nbsp; ASP.NET MVC &nbsp;·&nbsp; SQL Server &nbsp;·&nbsp; Vue.js</div>
+    <div class="contacts">
+      <a href="mailto:Vinay.soni7585@gmail.com">
+        <svg class="contact-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg>
+        Vinay.soni7585@gmail.com
+      </a>
+      <span class="contact-item">
+        <svg class="contact-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/></svg>
+        +91-8923332904
+      </span>
+      <span class="contact-item">
+        <svg class="contact-icon" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/></svg>
+        Agra, India 282005
+      </span>
+      <a href="https://linkedin.com/in/vinay-soni-24275a195" target="_blank">
+        <svg class="contact-icon" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.338 16.338H13.67V12.16c0-.995-.017-2.277-1.387-2.277-1.39 0-1.601 1.086-1.601 2.207v4.248H8.014v-8.59h2.559v1.174h.037c.356-.675 1.227-1.387 2.526-1.387 2.703 0 3.203 1.778 3.203 4.092v4.711zM5.005 6.575a1.548 1.548 0 11-.003-3.096 1.548 1.548 0 01.003 3.096zm-1.337 9.763H6.34v-8.59H3.667v8.59zM17.668 1H2.328C1.595 1 1 1.581 1 2.298v15.403C1 18.418 1.595 19 2.328 19h15.34c.734 0 1.332-.582 1.332-1.299V2.298C19 1.581 18.402 1 17.668 1z" clip-rule="evenodd"/></svg>
+        linkedin.com/in/vinay-soni-24275a195
+      </a>
     </div>
-  </header>
-
-  <section id="about" class="fade-in">
-    <h2>Premium Manufacturing Excellence</h2>
-    <div class="section-content">
-      <div class="grid">
-        <div class="card">
-          <h3>🛠️ Premium Manufacturing</h3>
-          <p>Specialized factory in Agra producing food-grade custom water bottles for businesses nationwide.</p>
-        </div>
-        <div class="card">
-          <h3>🎯 Brand Promotion</h3>
-          <p>Every bottle carries your logo, turning hydration into powerful marketing at every event.</p>
-        </div>
-        <div class="card">
-          <h3>🚀 Wide Reach</h3>
-          <p>Fast delivery with bulk pricing and sample availability within 48 hours.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-<section id="products" class="fade-in">
-  <h2>Our Product Range</h2>
-  <div class="product-grid">
-
-    <!-- 250 ml -->
-    <div class="cards-row">
-      <div class="card">
-        <h3>💧 250 ml Mini Bottle</h3>
-        <ul style="padding-left: 1.2rem; margin-top: 1rem;">
-          <li>BPA‑free food‑grade plastic</li>
-          <li>Compact size for kids & small hands</li>
-          <li>Full‑color HD printing on body</li>
-          <li>Leak‑proof screw cap</li>
-          <li>Bulk pricing from 1000+ units</li>
-        </ul>
-      </div>
-      <div class="product-img-container">
-        <img src="Picture250.jpeg" alt="Mini 250 ml Custom Branded Water Bottle" class="product-img" loading="lazy">
-      </div>
-      <div class="card">
-        <h3>🎨 250 ml Customization</h3>
-        <p>Ideal for schools, kids events, and corporate gift kits with small‑format branding that still packs visibility.</p>
-      </div>
-    </div>
-
-    <!-- 500 ml -->
-    <div class="cards-row">
-      <div class="card">
-        <h3>💧 500 ml Everyday Bottle</h3>
-        <ul style="padding-left: 1.2rem; margin-top: 1rem;">
-          <li>BPA‑free food‑grade plastic</li>
-          <li>Ergonomic grip, easy to carry</li>
-          <li>Full‑color HD printing on body & cap</li>
-          <li>Perfect for gyms, offices & travel</li>
-          <li>Bulk pricing from 1000+ units</li>
-        </ul>
-      </div>
-      <div class="product-img-container">
-        <img src="picture500.jpeg" alt="500 ml Custom Branded Water Bottle" class="product-img" loading="lazy">
-      </div>
-      <div class="card">
-        <h3>🎨 500 ml Customization</h3>
-        <p>Great daily‑use bottle for brands running fitness‑centric campaigns, staff giveaways, and promotional drives.</p>
-      </div>
-    </div>
-
-    <!-- 1L (existing, slightly adjusted for consistency) -->
-    <div class="cards-row">
-      <div class="card">
-        <h3>💧 1L Premium Bottle</h3>
-        <ul style="padding-left: 1.2rem; margin-top: 1rem;">
-          <li>BPA‑free food‑grade plastic</li>
-          <li>Full‑color HD printing</li>
-          <li>Leak‑proof design</li>
-          <li>1000+ unit bulk pricing</li>
-          <li>FSSAI certified</li>
-        </ul>
-      </div>
-      <div class="product-img-container">
-        <img src="bottlesupsample.png" alt="1L Custom Branded Water Bottle" class="product-img" loading="lazy">
-      </div>
-      <div class="card">
-        <h3>🎨 Full Customization</h3>
-        <p>Logo, colors, QR codes, contact info – complete branding solution designed for maximum visibility.</p>
-      </div>
-    </div>
-
-    <!-- 2L -->
-    <div class="cards-row">
-      <div class="card">
-        <h3>💧 2L Family & Office Bottle</h3>
-        <ul style="padding-left: 1.2rem; margin-top: 1rem;">
-          <li>BPA‑free food‑grade heavy‑duty plastic</li>
-          <li>Large capacity for families & offices</li>
-          <li>Full‑color HD printing on body & base</li>
-          <li>Leak‑proof wide‑mouth design</li>
-          <li>Bulk pricing from 500+ units</li>
-        </ul>
-      </div>
-      <div class="product-img-container">
-        <img src="picture2ltr.jpeg" alt="2L Custom Branded Water Bottle" class="product-img" loading="lazy">
-      </div>
-      <div class="card">
-        <h3>🎨 2L Customization</h3>
-        <p>Ideal for offices, messes, cafeterias, and family‑focused campaigns where big‑volume hydration is key.</p>
-      </div>
-    </div>
-
   </div>
-</section>
 
+  <div class="body">
+    <!-- MAIN -->
+    <div class="main">
 
-  <section id="whyus" class="fade-in">
-    <h2>Why Businesses Choose Us</h2>
-    <div class="section-content">
-      <div class="grid">
-        <div class="card">
-          <h3>✅ Factory Quality</h3>
-          <p>FSSAI certified production with strict hygiene controls and quality assurance.</p>
+      <!-- SUMMARY -->
+      <div class="section">
+        <div class="section-title">Professional Summary</div>
+        <p class="summary">Results-driven Software Developer with <strong>3+ years of experience</strong> designing and delivering enterprise-grade web applications using .NET Core, ASP.NET MVC, and SQL Server. Proven track record building scalable REST APIs, ERP modules, and task-management systems. Adept at bridging backend logic with Vue.js frontend components. Strong communicator with a keen eye for database performance optimization.</p>
+      </div>
+
+      <!-- EXPERIENCE -->
+      <div class="section">
+        <div class="section-title">Professional Experience</div>
+
+        <div class="job">
+          <div class="job-header">
+            <div class="job-title">Software Developer</div>
+            <div class="job-dates">Oct 2025 – Present</div>
+          </div>
+          <div class="job-company">Agrawal Group of Publications — Agra, India</div>
+          <ul class="bullets">
+            <li>Developed and maintained enterprise-level .NET Core and ASP.NET MVC applications powering internal ERP systems used across departments.</li>
+            <li>Led backend REST API development for <strong>TACTO</strong>, an internal task-management platform — covering task creation, assignment, tracking, and reporting workflows.</li>
+            <li>Delivered ~30% of frontend work using <strong>Vue.js</strong>, building reusable UI components and integrating them with backend APIs.</li>
+            <li>Contributed to <strong>TDC and ADC</strong> systems covering sales pipeline management, order tracking, and identity/access management.</li>
+            <li>Designed and optimized complex SQL Server queries and stored procedures, improving transactional reporting performance.</li>
+          </ul>
         </div>
-        <div class="card">
-          <h3>💰 Direct Pricing</h3>
-          <p>No middlemen - factory-direct rates with volume discounts from 1000 bottles.</p>
-        </div>
-        <div class="card">
-          <h3>⚡ Express Delivery</h3>
-          <p>Samples in 48hrs, bulk orders 7-10 days pan-India from Agra hub.</p>
-        </div>
-        <div class="card">
-          <h3>📈 Marketing Impact</h3>
-          <p>Your brand travels everywhere - conferences, offices, events nationwide.</p>
+
+        <div class="job">
+          <div class="job-header">
+            <div class="job-title">Junior Software Developer</div>
+            <div class="job-dates">Aug 2022 – Sep 2025</div>
+          </div>
+          <div class="job-company">I Diary IT Solutions Pvt. Ltd. — Agra, India</div>
+          <ul class="bullets">
+            <li>Designed and supported ASP.NET (C#) web applications with SQL Server backends serving multiple business clients.</li>
+            <li>Engineered ERP modules with database-driven business logic, improving operational efficiency and reducing manual processing.</li>
+            <li>Collaborated cross-functionally with designers, QA, and product teams to deliver features on schedule and resolve production issues.</li>
+          </ul>
         </div>
       </div>
-    </div>
-  </section>
 
-  <section id="reviews" class="fade-in">
-    <h2>Trusted by Businesses</h2>
-    <div class="section-content">
-      <div class="review-grid">
-        <div class="review-card">
-          <p>Perfect for our annual corporate retreat! Quality exceeded expectations and labels looked premium.</p>
-          <div class="stars">★★★★★</div>
-          <div class="reviewer">Priya Sharma, One Life Cafe & Restaurant</div>
+      <!-- PROJECTS -->
+      <div class="section">
+        <div class="section-title">Key Projects</div>
+
+        <div class="project">
+          <div class="project-name">TACTO — Employee Task Management System</div>
+          <div class="project-tech">.NET Core · ASP.NET MVC · Web API · SQL Server · Vue.js</div>
+          <ul class="bullets">
+            <li>Architected a complete suite of backend REST APIs for task creation, assignment, status tracking, and reporting.</li>
+            <li>Integrated APIs with Vue.js frontend components, delivering a responsive, real-time user experience.</li>
+          </ul>
         </div>
-        <div class="review-card">
-          <p>Best value for bulk custom bottles. Fast service from Agra and excellent print quality.</p>
-          <div class="stars">★★★★★</div>
-          <div class="reviewer">Rajesh Kumar, Agra Chaupati</div>
+
+        <div class="project">
+          <div class="project-name">TDC & ADC — Internal Business Applications</div>
+          <div class="project-tech">.NET Core · ASP.NET MVC · SQL Server</div>
+          <ul class="bullets">
+            <li>Built internal systems for sales management, order tracking, and identity management used daily by company teams.</li>
+            <li>Optimized core business modules, increasing system reliability and reducing manual processing time.</li>
+          </ul>
         </div>
-        <div class="review-card">
-          <p>Will reorder! Great for product launches and team events. Nationwide delivery worked perfectly.</p>
-          <div class="stars">★★★★☆</div>
-          <div class="reviewer">Anjali Mehta, Agra</div>
+
+        <div class="project">
+          <div class="project-name">ISAI Membership Portal</div>
+          <div class="project-tech">ASP.NET · C# · SQL Server</div>
+          <ul class="bullets">
+            <li>Built a membership and professional verification system for the Institute of Social Auditors of India.</li>
+            <li>Implemented registration workflows, multi-step approval processes, and document tracking features end-to-end.</li>
+          </ul>
         </div>
       </div>
+
     </div>
-  </section>
 
-  <section id="contact" class="cta fade-in">
-    <h2>Ready to Brand Your Bottles?</h2>
-    <p>Get custom pricing and free samples within 48 hours</p>
-    <div class="contact-info">
-      <strong>📞 +91-7983684535</strong>
-      <strong>✉️ as247017@gmail.com</strong>
-      <span>Agra, Uttar Pradesh • Pan-India Delivery</span>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+      <div class="section">
+        <div class="section-title">Technical Skills</div>
+
+        <div class="skill-group">
+          <div class="skill-label">Languages</div>
+          <div class="skill-tags">
+            <span class="skill-tag">C#</span>
+            <span class="skill-tag">Java</span>
+            <span class="skill-tag">JavaScript</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <div class="skill-label">Backend Frameworks</div>
+          <div class="skill-tags">
+            <span class="skill-tag">.NET Core</span>
+            <span class="skill-tag">ASP.NET MVC</span>
+            <span class="skill-tag">Web API</span>
+            <span class="skill-tag">REST APIs</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <div class="skill-label">Frontend</div>
+          <div class="skill-tags">
+            <span class="skill-tag">Vue.js</span>
+            <span class="skill-tag">HTML5</span>
+            <span class="skill-tag">CSS3</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <div class="skill-label">Database</div>
+          <div class="skill-tags">
+            <span class="skill-tag">SQL Server</span>
+            <span class="skill-tag">Stored Procedures</span>
+            <span class="skill-tag">Query Optimization</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <div class="skill-label">Soft Skills</div>
+          <div class="skill-tags">
+            <span class="skill-tag">Leadership</span>
+            <span class="skill-tag">Problem Solving</span>
+            <span class="skill-tag">Communication</span>
+            <span class="skill-tag">Time Management</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Education</div>
+
+        <div class="edu">
+          <div class="edu-degree">M.Tech — Computer Science</div>
+          <div class="edu-school">Raja Balwant Singh Engineering Technical Campus, Bichpuri, Agra</div>
+          <div class="edu-date">Aug 2025</div>
+        </div>
+
+        <div class="edu">
+          <div class="edu-degree">B.Tech — CS & Engineering</div>
+          <div class="edu-school">GLA University, Mathura</div>
+          <div class="edu-date">Jan 2022</div>
+        </div>
+      </div>
+
     </div>
-    <a href="tel:+917983684535">Call Now for Quote</a>
-  </section>
-
-  <footer>
-    <p>© 2026 BottlesUp. All Rights Reserved. | Premium Custom Water Bottles from Agra</p>
-    <p>FSSAI Certified | Bulk Orders Welcome</p>
-  </footer>
-
-  <script>
-    window.addEventListener('scroll', () => {
-      document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 100);
-    });
-
-    document.querySelectorAll('a[href^="#"]').forEach(link => {
-      link.addEventListener('click', e => {
-        e.preventDefault();
-        const targetId = link.getAttribute('href').substring(1);
-        const target = document.getElementById(targetId);
-        if (target) {
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          document.getElementById('menu-toggle').checked = false;
-        }
-      });
-    });
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    }, { threshold: 0.15, rootMargin: '0px 0px -100px 0px' });
-
-    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
-    window.addEventListener('scroll', () => {
-      const sections = document.querySelectorAll('section[id]');
-      let current = '';
-      
-      sections.forEach(section => {
-        const rect = section.getBoundingClientRect();
-        if (rect.top <= 150) {
-          current = section.id;
-        }
-      });
-      
-      document.querySelectorAll('.nav-links a').forEach(a => {
-        a.classList.remove('active');
-        if (a.getAttribute('href') === `#${current}`) {
-          a.classList.add('active');
-        }
-      });
-    });
-  </script>
+  </div>
+</div>
 </body>
 </html>
